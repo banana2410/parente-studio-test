@@ -5,6 +5,7 @@ using UnityEngine;
 //[RequireComponent(typeof(Rigidbody))]
 public class Movement : MonoBehaviour
 {
+    public Animator anim;
     [SerializeField] private float _speed;
     [SerializeField] private float _jumpHeight;
     private PlayerInput playerInput;
@@ -14,7 +15,7 @@ public class Movement : MonoBehaviour
 
     void Start()
     {
-
+        anim = gameObject.GetComponent<Animator>();
     }
     private void Awake()
     {
@@ -32,7 +33,10 @@ public class Movement : MonoBehaviour
         }
 
     }
-
+    private void Update()
+    {
+        anim.SetTrigger("Walk");
+    }
     public bool ShouldJump()
     {
         return playerInput.input.y > 0;
@@ -41,7 +45,7 @@ public class Movement : MonoBehaviour
     {
         if (initialForce)
         {
-            _rb.AddForce(Vector2.up * Time.fixedDeltaTime * _jumpHeight, ForceMode.Impulse);
+            _rb.AddForce(Vector2.up  * _jumpHeight, ForceMode.Impulse);
             initialForce = false;
         }
     }
