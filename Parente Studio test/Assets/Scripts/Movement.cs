@@ -1,32 +1,41 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+//SCRIPT THAT IS RESPONSIBLE FOR MOVING THE PLAYER 
 //[RequireComponent(typeof(Rigidbody))]
 public class Movement : MonoBehaviour
 {
-    public Animator anim;
+    //Speed of movement
     [SerializeField] private float _speed;
+    //Jump height
     [SerializeField] private float _jumpHeight;
+    //Reference to player input script
     private PlayerInput playerInput;
+
     private Rigidbody _rb;
+
+
     [SerializeField] private bool _isGrounded;
-    public bool initialForce;
+    //Helps determine if player had already made the jump
+    public bool alreadyJumped;
+
+    //Vector3 for storing rotation of player and readjusting it depending about where the player is facing
+    public Vector3 rotation;
 
     void Start()
     {
-        anim = gameObject.GetComponent<Animator>();
+        rotation = new Vector3(0f, 90f, 0f);
     }
     private void Awake()
     {
         //Setting references and initial values
-        initialForce = true;
+        alreadyJumped = false;
         playerInput = gameObject.GetComponent<PlayerInput>();
         _rb = gameObject.GetComponent<Rigidbody>();
     }
     private void FixedUpdate()
     {
-        _rb.velocity = new Vector2(playerInput.input.x * _speed * Time.fixedDeltaTime, _rb.velocity.y);
+        Move();
+
         if (ShouldJump())
         {
             Jump();
@@ -35,36 +44,47 @@ public class Movement : MonoBehaviour
     }
     private void Update()
     {
-        anim.SetTrigger("Walk");
+
     }
+
+    //Checks if player pressed the jump button and if it is grounded, if is, player is allowed to jump
     public bool ShouldJump()
     {
-        return playerInput.input.y > 0;
+        return playerInput.input.y > 0 && !alreadyJumped;
     }
+
+    //Adds upwards vertical force to player, causing it to jump, also setting jump check to true, so player cant do double jump
     public void Jump()
     {
-        if (initialForce)
+        _rb.AddForce(Vector2.up * _jumpHeight, ForceMode.Impulse);
+        alreadyJumped = true;
+    }
+
+    //Grabs player input and changing its velocity and rotation according to that, causing it to move and rotate accordingly
+    public void Move()
+    {
+        _rb.velocity = new Vector2(playerInput.input.x * _speed * Time.fixedDeltaTime, _rb.velocity.y);
+        if (playerInput.input.x > 0)
         {
-            _rb.AddForce(Vector2.up  * _jumpHeight, ForceMode.Impulse);
-            initialForce = false;
+            transform.rotation = Quaternion.Euler(rotation);
+        }
+        if (playerInput.input.x < 0)
+        {
+            transform.rotation = Quaternion.Euler(-rotation);
         }
     }
 
-    public void Move()
-    {
-        //dodat okricanje za 90 po y, ovisi u koju stranu setas, malo jos brzinu i animaciju dovest u red
-        _rb.velocity = Vector2.right * playerInput.input.x * Time.fixedDeltaTime * _speed;
-    }
-
-
+    //Ground check 
     private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.tag == "Ground")
         {
-            initialForce = true;
+            alreadyJumped = false;
             _isGrounded = true;
         }
     }
+
+    //Ground exit check
     private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.tag == "Ground")

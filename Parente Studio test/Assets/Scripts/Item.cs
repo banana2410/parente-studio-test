@@ -1,9 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+//SCRIPT THAT IS BASE CLASS FOR ALL PICKUPABLE ITEMS IN GAME
 public abstract class Item : MonoBehaviour
 {
+    //On collision with player, object deactivates itself and calls OnPickup method
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player")
@@ -12,6 +12,7 @@ public abstract class Item : MonoBehaviour
         }
     }
 
+    //Method that is called when player collides with pickupable object
     public virtual void OnPickup()
     {
         gameObject.SetActive(false);
