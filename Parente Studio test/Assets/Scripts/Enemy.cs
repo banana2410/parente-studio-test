@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 //BASE SCRIPT FOR ALL ENEMY ENTITIES IN GAME
-[RequireComponent(typeof(Rigidbody))]
+
 public class Enemy : MonoBehaviour
 {
     //Reference to data container for player health
@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
     }
     private void Awake()
     {
-        _rb = gameObject.GetComponent<Rigidbody>();
+
     }
 
     //Method that is called whenever player attack and hit enemy
