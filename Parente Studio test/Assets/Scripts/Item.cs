@@ -4,13 +4,16 @@
 public abstract class Item : MonoBehaviour
 {
     //On collision with player, object deactivates itself and calls OnPickup method
-    private void OnCollisionEnter(Collision collision)
+
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player")
         {
             OnPickup();
         }
     }
+
+
 
     //Method that is called when player collides with pickupable object
     public virtual void OnPickup()

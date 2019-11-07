@@ -10,6 +10,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private float _jumpHeight;
     //Reference to player input script
     private PlayerInput playerInput;
+    public float FallingSpeed;
 
     private Rigidbody _rb;
 
@@ -42,8 +43,9 @@ public class Movement : MonoBehaviour
     }
     private void Update()
     {
-
+        
     }
+
 
     //Checks if player pressed the jump button and if it is grounded, if is, player is allowed to jump
     public bool ShouldJump()
@@ -56,14 +58,14 @@ public class Movement : MonoBehaviour
     {
         if (_isGrounded)
         {
-            _rb.velocity = new Vector3(_rb.velocity.x, _jumpHeight, 0f);
+            _rb.velocity = new Vector2(_rb.velocity.x , _jumpHeight);
         }
     }
 
     //Grabs player input and changing its velocity and rotation according to that, causing it to move and rotate accordingly
     public void Move()
     {
-        _rb.velocity = new Vector2(playerInput.input.x * _speed * Time.fixedDeltaTime, _rb.velocity.y);
+        _rb.velocity = new Vector2(playerInput.input.x * _speed, _rb.velocity.y);
         if (playerInput.input.x > 0)
         {
             transform.rotation = Quaternion.Euler(rotation);
@@ -78,13 +80,13 @@ public class Movement : MonoBehaviour
     public void MoveRight()
     {
         Debug.Log("A");
-        _rb.velocity = new Vector2(1f * _speed * Time.fixedDeltaTime, _rb.velocity.y);
+        _rb.velocity = new Vector2(1f * _speed, _rb.velocity.y);
         transform.rotation = Quaternion.Euler(rotation);
     }
     public void MoveLeft()
     {
         Debug.Log("A");
-        _rb.velocity = new Vector2(-1f * _speed * Time.fixedDeltaTime, _rb.velocity.y);
+        _rb.velocity = new Vector2(-1f * _speed, _rb.velocity.y);
         transform.rotation = Quaternion.Euler(-rotation);
     }
 
