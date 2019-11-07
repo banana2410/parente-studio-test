@@ -35,12 +35,10 @@ public class Movement : MonoBehaviour
     private void FixedUpdate()
     {
         Move();
-
         if (ShouldJump())
         {
             Jump();
         }
-
     }
     private void Update()
     {
@@ -50,14 +48,16 @@ public class Movement : MonoBehaviour
     //Checks if player pressed the jump button and if it is grounded, if is, player is allowed to jump
     public bool ShouldJump()
     {
-        return playerInput.input.y > 0 && !alreadyJumped;
+        return playerInput.input.y > 0;
     }
 
     //Adds upwards vertical force to player, causing it to jump, also setting jump check to true, so player cant do double jump
     public void Jump()
     {
-        _rb.AddForce(Vector2.up * _jumpHeight, ForceMode.Impulse);
-        alreadyJumped = true;
+        if (_isGrounded)
+        {
+            _rb.velocity = new Vector3(_rb.velocity.x, _jumpHeight, 0f);
+        }
     }
 
     //Grabs player input and changing its velocity and rotation according to that, causing it to move and rotate accordingly
@@ -73,6 +73,22 @@ public class Movement : MonoBehaviour
             transform.rotation = Quaternion.Euler(-rotation);
         }
     }
+
+    #region Touch controls
+    public void MoveRight()
+    {
+        Debug.Log("A");
+        _rb.velocity = new Vector2(1f * _speed * Time.fixedDeltaTime, _rb.velocity.y);
+        transform.rotation = Quaternion.Euler(rotation);
+    }
+    public void MoveLeft()
+    {
+        Debug.Log("A");
+        _rb.velocity = new Vector2(-1f * _speed * Time.fixedDeltaTime, _rb.velocity.y);
+        transform.rotation = Quaternion.Euler(-rotation);
+    }
+
+    #endregion
 
     //Ground check 
     private void OnCollisionStay(Collision collision)
