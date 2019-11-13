@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - MovingPlatform
+  - Death
+  - Sliding
+  - Skull
+  - Coin
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -15,8 +21,8 @@ TagManager:
   - 
   - 
   - Ground
-  - 
-  - 
+  - Enemy
+  - Player
   - 
   - 
   - 

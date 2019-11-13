@@ -4,18 +4,17 @@
 public class AnimationController : MonoBehaviour
 {
     private PlayerInput _playerInput;
-    private Animator _animator;
+
 
     private void Awake()
     {
         _playerInput = gameObject.GetComponent<PlayerInput>();
-        _animator = gameObject.GetComponent<Animator>();
+
     }
 
 
     void Update()
     {
-        _animator.SetInteger("HorizInput", (int)_playerInput.input.x);
-        
+        //_animator.SetInteger("HorizInput", (int)_playerInput.input.x);      
     }
 }

@@ -4,32 +4,33 @@ using UnityEngine;
 
 public class ParallaxEffect : MonoBehaviour
 {
+    //Lenght of the sprite
     private float lenght;
+
+    //Start pos of the sprite
     private float startPos;
+
+    //Speed of sprite movement based on camera pos
     [SerializeField] private float _parallaxEffectIntensity;
 
+    //Main cam
     private Camera cam;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+
+    //References
     private void Awake()
     {
         cam = Camera.main;
         startPos = transform.position.x;
         lenght = gameObject.GetComponent<SpriteRenderer>().bounds.size.x;
     }
-    // Update is called once per frame
+
+
     private void FixedUpdate()
-    {
-        //ParallaxEffectAction();
-    }
-    private void LateUpdate()
     {
         ParallaxEffectAction();
     }
 
+    //If sprite is no longer visible, reposition it in camera movement direction to get the 2.5D effect and infinite background
     public void ParallaxEffectAction()
     {
         float tempPos = cam.transform.position.x * (1 - _parallaxEffectIntensity);

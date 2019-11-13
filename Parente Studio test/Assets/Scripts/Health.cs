@@ -1,31 +1,53 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+//Health component on player
 public class Health : MonoBehaviour
 {
-    [SerializeField] private int _playerHealth;
-    private void OnTriggerEnter(Collider other)
+    public GameObject DeathScreen;
+    //Is player invincible?
+    private bool invincible;
+
+    private Rigidbody _rb;
+
+    //Player health data container
+    [SerializeField] private TrackerScriptableObject _playerHealth;
+
+
+    //What happens when player collides with enemy, if its hurt, wait for 2 seconds before it can take damage again
+    private void OnCollisionEnter(Collision collision)
     {
-        if(other.gameObject.tag == "Enemy")
+        if(!invincible)
         {
-            _playerHealth--;
-            if(_playerHealth == 0)
+            if (collision.gameObject.tag == "Enemy")
             {
-                //Game over
+                _playerHealth.Value--;
+                invincible = true;
+                Invoke("isVunerableAgain", 2f);
             }
+
         }
 
     }
     // Start is called before the first frame update
     void Start()
     {
-        _playerHealth = 0;
+        _rb = gameObject.GetComponent<Rigidbody>();      
+    }
+
+    public void isVunerableAgain()
+    {
+        invincible = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(_playerHealth.Value == 0)
+        {
+            DeathScreen.SetActive(true);
+            _playerHealth.Value = 1;
+            Time.timeScale = 0f;
+        }
     }
 }

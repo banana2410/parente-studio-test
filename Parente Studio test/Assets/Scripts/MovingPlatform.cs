@@ -4,21 +4,29 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
+    //Start pos of platform
     private Vector3 _startPos;
-     private Vector3 _targetPos;
-    private Vector3 _nextPos;
+    //startpos+desiredpos
+    private Vector3 _targetPos;
+    //Where we want to move it
+    private Vector3 _desiredPos;
+
+    //Speed of platform
     private float _speed;
-    [SerializeField] private float _posIncrement;
+
+    //Where we want to move platform
+    [SerializeField] private Vector3 _whereToMove;
     // Start is called before the first frame update
     void Start()
     {
         _speed = 1.5f;
-        _nextPos = _targetPos;
     }
+    //Setting startpos to current position, desiredpos to startpos+ wheretomove, targetpos is desiredpos after calculation
     private void Awake()
     {
         _startPos = gameObject.transform.position;
-        _targetPos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + _posIncrement, gameObject.transform.position.z);
+        _desiredPos = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z) + _whereToMove;
+        _targetPos = _desiredPos;
     }
 
     // Update is called once per frame
@@ -27,16 +35,17 @@ public class MovingPlatform : MonoBehaviour
         MovePlatform();
     }
 
+    //Moves platform
     public void MovePlatform()
     {
-        transform.position = Vector3.MoveTowards(transform.position, _nextPos, _speed * Time.deltaTime);
-        if (gameObject.transform.position.y == _nextPos.y)
+        transform.position = Vector3.MoveTowards(transform.position, _targetPos, _speed * Time.deltaTime);
+        if (gameObject.transform.position == _targetPos)
         {
-            _nextPos = _startPos;
+            _targetPos = _startPos;
         }
-        if (gameObject.transform.position.y == _nextPos.y)
+        if (gameObject.transform.position == _startPos)
         {
-            _nextPos = _targetPos;
+            _targetPos = _desiredPos;
         }
     }
 }
